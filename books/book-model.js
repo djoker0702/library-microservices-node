@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 mongoose.model('Book', {
 
-   title: {
+    title: {
        type: String,
        require: true
    },
@@ -19,3 +19,5 @@ mongoose.model('Book', {
        require: false
    }
 });
+
+module.exports = mongoose.model('Book');
