@@ -67,6 +67,20 @@ module.exports = function(router) {
         });
     
     });
+
+    router.delete('/book/:id', function(req, res){
+
+        Book.findOneAndDelete(req.params.id).then(function(){
+            res.end('Book deleted with success');
+        }).catch(function(err){
+            if (err) {
+                res.status(500).send(err);
+                console.log(err);
+                throw err;
+            }
+        })
+
+    });
     
 
 
