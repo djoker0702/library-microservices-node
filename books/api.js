@@ -1,5 +1,7 @@
 const Book = require('./book-model')
-const ObjectId = require('mongodb').ObjectId
+const mongoose = require('mongoose');
+const ObjectId = mongoose.mongo.ObjectId;
+
 
 module.exports = function(router) {
 
@@ -12,11 +14,11 @@ module.exports = function(router) {
             title: req.body.title,
             author: req.body.author,
             numberPages: req.body.numberPages,
-            publisher: req.body.publisher
+            publisher: req.body.publisher,
         }
         var book = new Book(newBook);
         book.save().then(function(){
-            console.log('new brook created');
+            console.log('New brook created');
 
         }).catch(function(err){
             console.log(err);
@@ -28,10 +30,11 @@ module.exports = function(router) {
 
     router.get('/books', function(req,res){
         Book.find().then(function(books){
-            console.log(books);
+            console.log(books[0]._id)
             res.json(books);
         }).catch(function(err){
             if (err) {
+                res.send(err);
                 throw err;
             }
         })
@@ -39,12 +42,19 @@ module.exports = function(router) {
 
 
     router.get("/book/:id", function(req,res){
-        var id = req.params.id;
-        Book.findById(id).then(function(book){
-            if (book) {
-                res.json(book);
+
+        Book.find().then(function(books){
+            if (books) {
+                for (i = 0; i <books.length; i++) {
+                    if (books[i]._id == req.params.id) {
+                        console.log(books[i]);
+                        res.status(200).json(books[i]).end();
+                    }
+                }
+                res.status(404).send('Book not found').end();
+                
             } else {
-                res.sendStatus(404);
+                res.status(404).send('Library is empty').end()
             }
 
         }).catch(function(err){

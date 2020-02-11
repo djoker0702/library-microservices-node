@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser');
 const router = express.Router();
 const routes = require('./api')(router)
+const morgan = require('morgan');
+
 
 const app = express();
 
@@ -22,8 +24,9 @@ mongoose.connect(uri, function(err){
 mongoose.set('debug', true);
 
 app.use(bodyParser.json());
+app.use(morgan('dev'));
 app.use('/', routes);
-app.listen(4545 || process.env.PORT, function(err){
+app.listen(4545, function(err){
     if (err) {
         console.log(err);
         throw err;
