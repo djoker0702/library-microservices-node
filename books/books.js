@@ -6,7 +6,12 @@ const routes = require('./api')(router)
 
 const app = express();
 
-const uri = 'mongodb+srv://mongo:77y5De6YBdqR9BtG@cluster0-53eon.mongodb.net/test?retryWrites=true&w=majority'
+
+const password = process.env.PASSWORD // can be AWS KMS cyper => decrypt it with AWS NodeJS SDK before using it
+const user = process.env.USER
+const db_host = process.env.DB_URL // @smthing.mongodb.net/smthing?retryWrites=true&w=majority
+const uri = 'mongodb+srv://' + user + ':' + password + db_host
+
 mongoose.connect(uri, function(err){
     if (err) {
     console.log('Authentication to db failed: ', err);
@@ -18,6 +23,10 @@ mongoose.set('debug', true);
 
 app.use(bodyParser.json());
 app.use('/', routes);
-app.listen(4545, function(){
+app.listen(4545 || process.env.PORT, function(err){
+    if (err) {
+        console.log(err);
+        throw err;
+    }
     console.log('Books service is up and running');
 })
