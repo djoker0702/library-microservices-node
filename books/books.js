@@ -1,5 +1,5 @@
 var express = require('express');
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var router = express.Router();
 var routes = require('./app/api')(router)
@@ -14,7 +14,7 @@ var user = process.env.USER
 var db_host = process.env.DB_URL // @smthing.mongodb.net/smthing?retryWrites=true&w=majority
 var uri = 'mongodb+srv://' + user + ':' + password + db_host
 
-mongoose.connect(uri, {useNewUrlParser: true}, function(err){
+mongoose.connect(uri, {useNewUrlParser: true , useUnifiedTopology: true}, function(err){
     if (err) {
     console.log('Authentication to db failed: ', err);
     } else {

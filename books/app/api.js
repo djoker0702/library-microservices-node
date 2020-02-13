@@ -6,9 +6,9 @@ const mongodb = require('mongodb');
 
 module.exports = function(router) {
 
-    // router.get('/', function(req,res){
-    //     res.send('This is the books service main endpoint')
-    // })
+    router.get('/', function(req,res){
+        res.send('This is the books service main endpoint')
+    })
 
     router.post('/book', function(req,res){
         var newBook = {
