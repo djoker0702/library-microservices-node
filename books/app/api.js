@@ -1,13 +1,14 @@
 const Book = require('./book-model')
 const mongoose = require('mongoose');
 const ObjectId = mongoose.mongo.ObjectId;
+const mongodb = require('mongodb');
 
 
 module.exports = function(router) {
 
-    router.get('/', function(req,res){
-        res.send('This is the books service main endpoint')
-    })
+    // router.get('/', function(req,res){
+    //     res.send('This is the books service main endpoint')
+    // })
 
     router.post('/book', function(req,res){
         var newBook = {
@@ -41,44 +42,78 @@ module.exports = function(router) {
     });
 
 
-    router.get("/book/:id", function(req,res){
+    router.get("/book/:id", function(req, res){
 
-        Book.find().then(function(books){
-            if (books) {
-                for (i = 0; i <books.length; i++) {
-                    if (books[i]._id == req.params.id) {
-                        console.log(books[i]);
-                        res.status(200).json(books[i]).end();
-                    }
-                }
-                res.status(404).send('Book not found').end();
-                
+
+        console.log(req.params)
+        console.log(mongodb.ObjectId.isValid(req.params.id))
+        Book.findById(req.params.id).then(function(book){
+            if (book) {
+                res.json(book);
             } else {
-                res.status(404).send('Library is empty').end()
+                res.send("Book Not found");
             }
-
         }).catch(function(err){
             if (err) {
                 console.log(err);
                 res.send(err);
                 throw err;
-                
             }
-        });
+        })
+    })
+
+    // router.get("/book/:id", function(req,res){
+
+    //     Book.find().then(function(books){
+    //         if (books) {
+    //             for (i = 0; i <books.length; i++) {
+    //                 if (books[i]._id == req.params.id) {
+    //                     console.log(books[i]);
+    //                     res.status(200).json(books[i]).end();
+    //                 }
+    //             }
+    //             res.status(404).send('Book not found').end();
+                
+    //         } else {
+    //             res.status(404).send('Library is empty').end()
+    //         }
+
+    //     }).catch(function(err){
+    //         if (err) {
+    //             console.log(err);
+    //             res.send(err);
+    //             throw err;
+                
+    //         }
+    //     });
     
-    });
+    // });
 
     router.delete('/book/:id', function(req, res){
 
-        Book.findOneAndDelete(req.params.id).then(function(){
-            res.end('Book deleted with success');
-        }).catch(function(err){
-            if (err) {
-                res.status(500).send(err);
-                console.log(err);
-                throw err;
-            }
-        })
+        id = req.params.id;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            res.status(404).end('Invalid Id');
+        } else {
+
+            Book.findByIdAndDelete(id).then(function(data){
+                if (data) {
+                    console.log('Deleted the following : \n' + data);
+                    res.send('Book deleted with success');
+                } else {
+                    res.send('Book already deleted or not found');
+                }
+                
+                
+            }).catch(function(err){
+                if (err) {
+                    res.status(500).send('Server failed to process request');
+                    console.log(err);
+                    throw err;
+                }
+            });
+        }
+
 
     });
     

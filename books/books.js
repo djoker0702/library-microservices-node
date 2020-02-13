@@ -1,20 +1,20 @@
-const express = require('express');
-const mongoose = require('mongoose')
-const bodyParser = require('body-parser');
-const router = express.Router();
-const routes = require('./app/api')(router)
-const morgan = require('morgan');
+var express = require('express');
+var mongoose = require('mongoose')
+var bodyParser = require('body-parser');
+var router = express.Router();
+var routes = require('./app/api')(router)
+var morgan = require('morgan');
 
 
-const app = express();
+var app = express();
 
 
-const password = process.env.PASSWORD // can be AWS KMS cyper => decrypt it with AWS NodeJS SDK before using it
-const user = process.env.USER
-const db_host = process.env.DB_URL // @smthing.mongodb.net/smthing?retryWrites=true&w=majority
-const uri = 'mongodb+srv://' + user + ':' + password + db_host
+var password = process.env.PASSWORD // can be AWS KMS cyper => decrypt it with AWS NodeJS SDK before using it
+var user = process.env.USER
+var db_host = process.env.DB_URL // @smthing.mongodb.net/smthing?retryWrites=true&w=majority
+var uri = 'mongodb+srv://' + user + ':' + password + db_host
 
-mongoose.connect(uri, function(err){
+mongoose.connect(uri, {useNewUrlParser: true}, function(err){
     if (err) {
     console.log('Authentication to db failed: ', err);
     } else {

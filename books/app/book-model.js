@@ -1,8 +1,5 @@
-const mongoose = require('mongoose');
-
-
-
-const schema = new mongoose.Schema({
+var mongoose = require('mongoose');
+var schema = new mongoose.Schema({
 
        title: {
            type: String,
@@ -22,5 +19,4 @@ const schema = new mongoose.Schema({
        }
     
 });
-
 module.exports = mongoose.model('Book', schema);
