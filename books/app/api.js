@@ -43,54 +43,31 @@ module.exports = function(router) {
 
 
     router.get("/book/:id", function(req, res){
+        // Check if the id is a proper objectId type
+        id = req.params.id;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            res.status(404).end('Invalid Id');
+        } else { 
+            Book.findById(req.params.id).then(function(book){
+                if (book) {
+                    res.json(book);
+                } else {
+                    res.send("Book Not found");
+                }
+            }).catch(function(err){
+                if (err) {
+                    console.log(err);
+                    res.send(err);
+                    throw err;
+                }
+            });
 
+        }
 
-        console.log(req.params)
-        console.log(mongodb.ObjectId.isValid(req.params.id))
-        Book.findById(req.params.id).then(function(book){
-            if (book) {
-                res.json(book);
-            } else {
-                res.send("Book Not found");
-            }
-        }).catch(function(err){
-            if (err) {
-                console.log(err);
-                res.send(err);
-                throw err;
-            }
-        })
-    })
-
-    // router.get("/book/:id", function(req,res){
-
-    //     Book.find().then(function(books){
-    //         if (books) {
-    //             for (i = 0; i <books.length; i++) {
-    //                 if (books[i]._id == req.params.id) {
-    //                     console.log(books[i]);
-    //                     res.status(200).json(books[i]).end();
-    //                 }
-    //             }
-    //             res.status(404).send('Book not found').end();
-                
-    //         } else {
-    //             res.status(404).send('Library is empty').end()
-    //         }
-
-    //     }).catch(function(err){
-    //         if (err) {
-    //             console.log(err);
-    //             res.send(err);
-    //             throw err;
-                
-    //         }
-    //     });
-    
-    // });
+    });
 
     router.delete('/book/:id', function(req, res){
-
+        // Check if the id is a proper objectId type
         id = req.params.id;
         if (!mongoose.Types.ObjectId.isValid(id)) {
             res.status(404).end('Invalid Id');
