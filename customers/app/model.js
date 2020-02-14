@@ -4,23 +4,18 @@ const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
 
-       title: {
+       name: {
            type: String,
            require: true
        },
-       author: {
-            type: String,
+       age: {
+            type: Number,
             require: true
        },
-       numberPages: {
-            type: Number,
+       address: {
+            type: String,
             require: false
-       },
-       publisher: {
-           type: String,
-           require: false
        }
-    
 });
 
 module.exports = mongoose.model('Customer', schema);

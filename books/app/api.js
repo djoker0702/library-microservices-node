@@ -1,7 +1,5 @@
-const Book = require('./book-model')
+const Book = require('./model')
 const mongoose = require('mongoose');
-const ObjectId = mongoose.mongo.ObjectId;
-const mongodb = require('mongodb');
 
 
 module.exports = function(router) {
@@ -31,7 +29,6 @@ module.exports = function(router) {
 
     router.get('/books', function(req,res){
         Book.find().then(function(books){
-            console.log(books[0]._id)
             res.json(books);
         }).catch(function(err){
             if (err) {
@@ -75,10 +72,9 @@ module.exports = function(router) {
 
             Book.findByIdAndDelete(id).then(function(data){
                 if (data) {
-                    console.log('Deleted the following : \n' + data);
                     res.send('Book deleted with success');
                 } else {
-                    res.send('Book already deleted or not found');
+                    res.send('Book not found');
                 }
                 
                 
