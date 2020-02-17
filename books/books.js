@@ -12,7 +12,7 @@ var app = express();
 var password = process.env.PASSWORD // can be AWS KMS cyper => decrypt it with AWS NodeJS SDK before using it
 var user = process.env.USER
 var db_host = process.env.DB_URL // @smthing.mongodb.net/smthing?retryWrites=true&w=majority
-var uri = 'mongodb+srv://' + user + ':' + password + db_host
+var uri = 'mongodb://' + user + ':' + password + db_host
 
 mongoose.connect(uri, {useNewUrlParser: true , useUnifiedTopology: true}, function(err){
     if (err) {
